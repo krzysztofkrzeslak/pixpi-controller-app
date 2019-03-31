@@ -1,0 +1,18 @@
+//start worker with delay
+
+curl -H "Content-Type: application/json" -X POST -d '{"script_content":"time.sleep(10)"}' http://192.168.1.14:8000/startWorker
+
+
+curl -H "Content-Type: application/json" -X POST http://192.168.1.14:8000/killWorker
+
+//Set port functions 
+
+curl -H "Content-Type: application/json" -X POST -d '{"port_red":{"function":"output"},"port_blue":{"function":"output"},"port_green":{"function":"input"}}' http://192.168.1.14:8000/portConfig
+
+
+curl -H "Content-Type: application/json" -X POST -d '{"script_content":"portRed.write(1)"}' http://192.168.1.14:8000/startWorker
+
+
+curl -H "Content-Type: application/json" -X POST -d '{"script_content":"from board.onewire.master import UART_Adapter\nfrom board.onewire.device import AddressableDevice\nprint(AddressableDevice(UART_Adapter(\"/dev/ttyS0\")).get_connected_ROMs())"}' http://192.168.1.14:8000/startWorker
+curl -H "Content-Type: application/json" -X POST -d $'{"script_content":"from board.onewire.device import AddressableDevice"}' http://192.168.1.14:8000/startWorker
+curl -H "Content-Type: application/json" -X POST -d $'{"script_content":"print(AddressableDevice(UART_Adapter(\'/dev/ttyS0\')).get_connected_ROMs())"}' http://192.168.1.14:8000/startWorker
