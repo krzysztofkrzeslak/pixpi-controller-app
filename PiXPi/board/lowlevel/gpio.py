@@ -1,4 +1,4 @@
-import mem
+import hwreg
 
 GPIO1_MODE_REG=int("10000060",16)
 GPIO2_MODE_REG=int("10000064",16)
@@ -53,14 +53,14 @@ def setup(gpioNum, direction):
 			for bitNumValuePair in bitsValues:
 				bitNum=bitNumValuePair.keys()[0]
 				bitValue=bitNumValuePair[bitNum]
-				mem.write_bit(registerAddr,bitNum,bitValue)
+				hwreg.write_bit(registerAddr,bitNum,bitValue)
 				print("initialization rule for GPIO"+str(gpioNum)+",bit: "+ str(bitNum)+",value: "+str(bitValue)," in register "+hex(registerAddr))
 
 		#set gpio direction
 		gpioCtrlReg = GPIO_CTRL_BASE + ((gpioNum/32)*4)
 		bitNumber   = gpioNum % 32 if gpioNum>0 else 0
 
-		mem.write_bit(gpioCtrlReg,bitNumber,direction)
+		hwreg.write_bit(gpioCtrlReg,bitNumber,direction)
 		print("GPIO"+str(gpioNum)+" direction set to: "+str(direction))
 
 def setupPeriphial(periphialName):
@@ -70,7 +70,7 @@ def setupPeriphial(periphialName):
 			for bitNumValuePair in bitsValues:
 				bitNum=bitNumValuePair.keys()[0]
 				bitValue=bitNumValuePair[bitNum]
-				mem.write_bit(registerAddr,bitNum,bitValue)
+				hwreg.write_bit(registerAddr,bitNum,bitValue)
 				print("initialization rule for periphial: "+periphialName+", bit: "+ str(bitNum)+",value: "+str(bitValue)," in register "+hex(registerAddr))
 
 
@@ -79,8 +79,8 @@ def data(gpioNum, value=-1):
 	bitNumber   = gpioNum % 32 if gpioNum>0 else 0
 
 	if(value != -1):
-		mem.write_bit(gpioDataReg,bitNumber,value)
+		hwreg.write_bit(gpioDataReg,bitNumber,value)
 	else:
-		value=mem.read_bit(gpioDataReg,bitNumber)
+		value=hwreg.read_bit(gpioDataReg,bitNumber)
 
 	return value
