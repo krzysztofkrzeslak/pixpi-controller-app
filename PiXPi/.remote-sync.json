@@ -2,9 +2,9 @@
   "uploadOnSave": true,
   "useAtomicWrites": true,
   "deleteLocal": false,
-  "hostname": "192.168.1.14",
+  "hostname": "192.168.61.1",
   "port": "22",
-  "target": "/root/pixelPiApp",
+  "target": "/root/PiXPi",
   "ignore": [
     ".remote-sync.json",
     ".git/**"
@@ -12,5 +12,5 @@
   "username": "root",
   "password": "vocore",
   "watch": [],
-  "transport": "scp"
+  "transport": "sftp"
 }
