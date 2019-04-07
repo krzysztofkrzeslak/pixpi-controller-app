@@ -6,6 +6,8 @@ from board import Buzzer
 from board import Pin
 
 from multiprocessing import Process
+import os
+import signal
 import time
 
 #from workerfuns import *
@@ -48,6 +50,8 @@ def setup():
 
 
 def worker(bytecode):
+	global workerProcess
+	print("started process with pid: "+str(workerProcess.pid))
 	exec(bytecode)
 
 def startWorker(scriptContent):
@@ -82,11 +86,18 @@ def startWorker(scriptContent):
 def killWorker():
 	global workerProcess
 	global workerKilledFlag
-
-	if workerProcess is not None:
-		workerKilledFlag = 1
+	if (workerProcess is not None) and workerProcess.is_alive():
 		workerProcess.terminate()
-		time.sleep(0.01)
+		time.sleep(0.001)
+		if workerProcess.is_alive():
+			pid=workerProcess.pid
+			#jokes are over :P
+			os.kill(pid, signal.SIGKILL)
+			time.sleep(0.001)
+
+		print("process should be terminated now,is alive: "+str(workerProcess.is_alive()))
+	else:
+		print("process is not running")
 
 
 def isWorkerRunning():
