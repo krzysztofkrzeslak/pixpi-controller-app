@@ -23,8 +23,7 @@ portGreen=None
 PortBlue=None
 
 def setup():
-	vcBoardLed = Pin(44)
-	vcBoardLed.setLowState()
+
 	global camera
 	camera = CameraPort( Pin(Board.FOCUS_PIN), Pin(Board.SHUTTER_PIN))
 	global flash1
@@ -48,6 +47,10 @@ def setup():
 	global buzzer
 	buzzer=Buzzer()
 
+	#turn off vocore on board led
+	vcBoardLed = Pin(44)
+	vcBoardLed.setLowState()
+
 
 def worker(bytecode):
 	global workerProcess
@@ -66,7 +69,7 @@ def startWorker(scriptContent):
 
 
 		workerProcess = Process(target = worker, args=(bytecode, ))
-		
+
 		buzzer.execWarningSound()
 		workerProcess.start()
 		workerProcess.join()
