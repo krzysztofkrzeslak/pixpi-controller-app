@@ -1,3 +1,8 @@
+import os
+import signal
+import time
+from multiprocessing import Process
+
 from board import PiXPiBoard as Board
 from board import CameraPort
 from board import FlashPort
@@ -5,16 +10,8 @@ from board import ModulePort,ModuleComPort
 from board import Buzzer
 from board import Pin
 
-from multiprocessing import Process
-import os
-import signal
-import time
-
-#from workerfuns import *
-
 workerProcess = None
 workerKilledFlag = 0
-
 
 camera=None
 flash=None
@@ -46,11 +43,6 @@ def setup():
 
 	global buzzer
 	buzzer=Buzzer()
-
-	#turn off vocore on board led
-	vcBoardLed = Pin(44)
-	vcBoardLed.setLowState()
-
 
 def worker(bytecode):
 	global workerProcess
@@ -105,7 +97,6 @@ def killWorker():
 
 def isWorkerRunning():
 	global workerProcess
-
 	if workerProcess is not None:
 		if workerProcess.is_alive():
 			return 1

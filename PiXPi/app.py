@@ -12,7 +12,6 @@ if __name__ == '__main__':
 
     pixpi.setup()
     print("Pixel PI App starting on port: "+str(API_PORT))
-    #time.sleep(10)
     pixpi.buzzer.serverReadySound()
     pixpi.statusLed.data(1)
 
