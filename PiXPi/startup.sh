@@ -1,3 +1,4 @@
 #!/bin/sh
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-python $SCRIPTPATH/main.py
+APP_PATH="$( cd "$(dirname "$0")" ; pwd -P )"
+python $APP_PATH/main.pyc
+

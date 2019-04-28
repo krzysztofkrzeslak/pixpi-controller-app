@@ -1,3 +1,0 @@
-echo "0" > /sys/class/leds/vocore2\:fuchsia\:status/brightness
-/bin/ash /root/PiXPi/startup.sh
-exit 0
