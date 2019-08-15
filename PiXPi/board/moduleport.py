@@ -1,4 +1,8 @@
 from pin import Pin
+import time
+import threading
+from multiprocessing import Process
+
 
 class ModulePort:
     def __init__(self,powerDrivePin,IOPin,ledPin):
@@ -55,10 +59,29 @@ class ModulePort:
     def read(self):
         if(self.function=="out"):
             print "Warning:reading port pin initialized as output"
-
         return self.IOPin.data()
 
+    def pulse(self, timeMsHigh, timeMsLow, cycles):
+        timeSecHigh = timeMsHigh*0.001
+        timeSecLow = timeMsLow*0.001
+        for count in range(0,cycles):
+            start = time.time()
+            self.IOPin.data(1)
+            time.sleep(timeSecHigh-((time.time()-start)+0.000150))
+            start = time.time()
+            self.IOPin.data(0)
+            time.sleep( timeSecLow-((time.time()-start)+0.000150) )
+        self.setDefaultState()
 
+    def pulseProcess(self, timeMsHigh, timeMsLow, cycles, daemon=True):
+        pulseProcess = Process(target = self.pulse, args=(timeMsHigh, timeMsLow, cycles, ))
+        pulseProcess.start()
+        if not daemon:
+            pulseProcess.join()
+
+    def pulseThreaded(self, timeMsHigh, timeMsLow, cycles):
+        #pulseProcess = Process(target = self.pulse, args=(timeMsHigh, timeMsLow, cycles, ))
+        pulseThread = threading.Thread(target = self.pulse, args=(timeMsHigh, timeMsLow, cycles,))
 
 from onewire.master import UART_Adapter
 from onewire.device import AddressableModule
