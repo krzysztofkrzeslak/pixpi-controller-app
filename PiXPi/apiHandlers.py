@@ -38,7 +38,6 @@ def postPortsConfig():
     #port red configuration, it`s more complicated due it can serve as input,output or communication port
     if 'portRed' in portConf:
         portRedConf = portConf['portRed']
-
         if(portRedConf['function'] == 'out'):
             pixpi.portRed.setFunction('out')
             if(portRedConf['defaultState']):
@@ -46,20 +45,30 @@ def postPortsConfig():
                 responseBody['portRed']={'defaultState':pixpi.portRed.read()}
         elif(portRedConf['function'] == 'in'):
             pixpi.portRed.setFunction('in')
+	elif(portRedConf['function'] == 'step'):
+            pixpi.portRed.setFunction('out')
         elif(portRedConf['function'] == 'com'):
             pixpi.portRed.setFunction(portRedConf['function'])
             responseBody['portRed']={'roms':pixpi.portRed.getConnectedRoms()}
     #port green config as input/output
     if 'portGreen' in portConf:
-        pixpi.portGreen.setFunction(portConf['portGreen']['function'])
-        if('defaultState' in portConf['portGreen']):
-            pixpi.portGreen.setDefaultState(portConf['portGreen']['defaultState'])
+	if(portConf['portGreen']['function'] == 'step'):
+            pixpi.portRed.setFunction('out')
+	else:
+	    pixpi.portGreen.setFunction(portConf['portGreen']['function'])
+            if('defaultState' in portConf['portGreen']):
+            	pixpi.portGreen.setDefaultState(portConf['portGreen']['defaultState'])
+
 
     #port blue config as input/output
     if 'portBlue' in portConf:
-        pixpi.portBlue.setFunction(portConf['portBlue']['function'])
-        if('defaultState' in portConf['portBlue']):
-            pixpi.portBlue.setDefaultState(portConf['portBlue']['defaultState'])
+        if(portConf['portBlue']['function'] == 'step'):
+            pixpi.portBlue.setFunction('out')
+        else:
+            pixpi.portBlue.setFunction(portConf['portBlue']['function'])
+            if('defaultState' in portConf['portBlue']):
+                 pixpi.portBlue.setDefaultState(portConf['portBlue']['defaultState'])
+
         responseBody['portBlue']={'state':pixpi.portBlue.read()}
 
     response.headers['Content-Type'] = 'application/json'
