@@ -40,7 +40,9 @@ def postPortsConfig():
         portRedConf = portConf['portRed']
         if(portRedConf['function'] == 'out'):
             pixpi.portRed.setFunction('out')
-            if(portRedConf['defaultState']):
+            if('powerDriveMode' in portRedConf):
+                pixpi.portRed.setPowerDriveMode(portRedConf['powerDriveMode'])
+            if('defaultState' in portRedConf):
                 pixpi.portRed.setDefaultState(portRedConf['defaultState'])
                 responseBody['portRed']={'defaultState':pixpi.portRed.read()}
         elif(portRedConf['function'] == 'in'):
@@ -56,6 +58,8 @@ def postPortsConfig():
             pixpi.portRed.setFunction('out')
 	else:
 	    pixpi.portGreen.setFunction(portConf['portGreen']['function'])
+            if('powerDriveMode' in portConf['portGreen']):
+                pixpi.portGreen.setPowerDriveMode(portConf['portGreen']['powerDriveMode'])
             if('defaultState' in portConf['portGreen']):
             	pixpi.portGreen.setDefaultState(portConf['portGreen']['defaultState'])
 
@@ -66,6 +70,8 @@ def postPortsConfig():
             pixpi.portBlue.setFunction('out')
         else:
             pixpi.portBlue.setFunction(portConf['portBlue']['function'])
+            if('powerDriveMode' in portConf['portBlue']):
+                pixpi.portBlue.setPowerDriveMode(portConf['portBlue']['powerDriveMode'])
             if('defaultState' in portConf['portBlue']):
                  pixpi.portBlue.setDefaultState(portConf['portBlue']['defaultState'])
 

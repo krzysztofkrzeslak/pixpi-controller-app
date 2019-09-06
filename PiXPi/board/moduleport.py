@@ -5,14 +5,16 @@ from multiprocessing import Process
 
 
 class ModulePort:
-    def __init__(self,powerDrivePin,IOPin,ledPin):
+    def __init__(self,powerDrivePin,IOPin,ledPin,powerDriveMode=False):
         self.powerDrivePin = powerDrivePin
-        self.powerDrivePin.setHighState()
+        self.powerDriveMode = powerDriveMode
+        if(powerDriveMode==False):
+            self.powerUp()
         self.IOPin = IOPin
         self.ledPin = ledPin
         self.function = "out"
         self.defaultState = "low"
-        self.powerUp()
+
 
     def powerUp(self):
         self.powerDrivePin.setHighState()
@@ -31,10 +33,17 @@ class ModulePort:
     def getFunction(self):
         return self.function
 
-    def setDefaultState(self,defaultState=None):
+    def setPowerDriveMode(self, powerDriveMode):
+        self.powerDriveMode = powerDriveMode
+        if(powerDriveMode==True):
+            self.powerDrivePin.data(0)
+        else:
+            self.powerDrivePin.data(1)
+
+
+    def setDefaultState(self, defaultState=None):
         if(defaultState!=None):
             self.defaultState = defaultState
-
         if(self.function == "out"):
             if(self.defaultState=="high"):
                 self.write(Pin.HIGH_STATE)
@@ -53,8 +62,10 @@ class ModulePort:
             print "Warning:writing data to port pin initialized as input"
         else:
             self.ledPin.data(state)
-        self.IOPin.data(state)
-
+        if(self.powerDriveMode==True):
+            self.powerDrivePin.data(state)
+        else:
+            self.IOPin.data(state)
 
     def read(self):
         if(self.function=="out"):
